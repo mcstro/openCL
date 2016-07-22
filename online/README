@@ -1,0 +1,61 @@
+MARK STROTHER
+Taken from http://stackoverflow.com/questions/26517114/how-to-compile-opencl-project-with-kernels
+
+Notes:
+
+COMPILATION: ONLINE VS OFFLINE
+=============================
+
+"The program I showed and explained about creates the device program 
+from the kernel source code. Another option is to use binaries instead. 
+Using binary program enhances application loading time and allows binary 
+distribution of the program but limits portability since binaries that 
+work fine on one device may not work on another device. Creating program 
+using source code and binary are also called offline and online compilation 
+respectively (more information here 
+http://www.fixstars.com/en/opencl/book/OpenCLProgrammingBook/online-offline-compilation/ )."
+
+^^ This explains what is going on with different approaches. Seems like with OCL
+you can either
+1. "online"** Write the kernel as a string and call "cl::build". This is called JIT
+   (just in time)
+2. "offline" Compile the kernels into bitcode (*.bc) and link to them
+
+**Poster on stackoverflow actually has online vs offline mixed up
+
+MORE ON ONLINE VS OFFLINE...
+
+In the first approach, you don't ever explicitly call the function inside the kernel by name.
+You make calls to the OpenCL framework, parse the source code and create a cl::Kernel object.
+So, you don't need to include any headers or link against any object files. Just compile
+the code with clang like C/C++ code, include the OCL header file^ and turn it into an executable, viz
+
+clang++ ocl_vector_addition.cpp -framework OpenCL -std=c++11 -o vecadd.exe
+
+I didn't say anything about the device, and I didn't have to compile the kernel at all. However,
+"this is not suited for commercial applications" because they don't want you to see the source code:
+
+http://www.cs.bris.ac.uk/home/simonm/montblanc/AdvancedOpenCL_full.pdf
+
+
+
+
+
+^I did have to download a file from Khronos called cl.hpp for C++ support.
+
+
+
+CLANG VS G++
+==============
+
+Wtf, this error in /usr/include/dispatch/object.h is not present with clang but is with gcc.
+Yet another error that makes me reluctantly choose clang over gcc
+
+http://hamelot.io/programming/osx-gcc-dispatch_block_t-has-not-been-declared-invalid-typedef/
+
+If i really wanted to use gcc then apparently I'm supposed to change
+> typedef void (^dispatch_block_t)(void);
+to
+> typedef void* dispatch_block_t;
+
+Screw that.

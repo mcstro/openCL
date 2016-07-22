@@ -1,0 +1,15 @@
+Type "make" to build the byte code for multiple architectures.
+Type "make clean" to nuke it all.
+
+The Makefile was provided by a blogger (link in Makefile), whose guidance made this example possible.
+
+Khronos does not appear to offer much guidance when it comes to offline compilation.
+
+If Mac, you can also just copy the code right into Xcode and click the compile button. Xcode will automagically 
+figure out exactly which flags to give to clang, and you can also configure them in the project's
+build settings if they are not to your taste. Xcode has some real pros and cons, but I consider its behavior wrt
+OpenCL to be a "pro." Then again, they might update it at some point and everything breaks.
+
+http://fuckingclangwarnings.com
+
+
